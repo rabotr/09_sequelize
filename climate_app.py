@@ -124,12 +124,14 @@ def tobs():
 @app.route("/api/v1.0/<start>")
 def start_date(start):
     """temp data by start date"""
+
+    import pdb; pdb.set_trace()
     start = datetime.strptime(start, "%Y-%m-%d").date()
 
     # Query
     sel = [Measurements.date, Measurements.tobs]
        
-    start_results = session.query(*sel, func.min(Measurements.tobs), func.avg(Measurements,tobs), func.max(Measurements.tobs)).\
+    start_results = session.query(*sel, func.min(Measurements.tobs), func.avg(Measurements.tobs), func.max(Measurements.tobs)).\
         filter(Measurements.date.between(start, Measurements.date.max())).all()
 
     return jsonify(start_results)
@@ -140,14 +142,14 @@ def start_date(start):
 @app.route("/api/v1.0/<start>/<end>")
 def start_end_date(start, end):
     """temp data by start and end date"""
-    start = datetime.strptime(start, "%Y-%m-%d").date()
-    end = datetime.strptime(end, "%Y-%m-%d").date()
+    # start = datetime.strptime(start, "%Y-%m-%d").date()
+    # end = datetime.strptime(end, "%Y-%m-%d").date()
 
     # Query
     sel = [Measurements.date, Measurements.tobs]
-       
-    start_end_results = session.query(*sel, func.min(Measurements.tobs), func.avg(Measurements,tobs), func.max(Measurements.tobs)).\
-        filter(Measurements.date.between(start, end)).all()
+    import pdb; pdb.set_trace()
+    start_end_results = session.query(Measurements.date, Measurements.tobs, func.min(Measurements.tobs), func.avg(Measurements.tobs), func.max(Measurements.tobs)).\
+        filter(Measurements.date > start).filter(Measurements.date < end).all()
 
     return jsonify(start_end_results)
 
