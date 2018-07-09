@@ -124,12 +124,13 @@ def tobs():
 @app.route("/api/v1.0/<start>")
 def start_date(start):
     """temp data by start date"""
+    start_1 = datetime.strptime(start, "%Y-%m-%d").date()
 
     # Query
     sel = [Measurements.date, Measurements.tobs]
        
     start_results = session.query(*sel, func.min(Measurements.tobs), func.avg(Measurements,tobs), func.max(Measurements.tobs)).\
-        filter(Measurements.date.between(start, Measurements.date.max())).all()
+        filter(Measurements.date.between(start_1, Measurements.date.max())).all()
 
     return jsonify(start_results)
 
@@ -139,6 +140,8 @@ def start_date(start):
 @app.route("/api/v1.0/<start>/<end>")
 def start_end_date(start, end):
     """temp data by start and end date"""
+    start_2 = datetime.strptime(start_2, "%Y-%m-%d").date()
+    end = datetime.strptime(end, "%Y-%m-%d").date()
 
     # Query
     sel = [Measurements.date, Measurements.tobs]
